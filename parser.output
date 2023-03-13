@@ -1,0 +1,336 @@
+Grammar
+
+    0 $accept: start $end
+
+    1 start: ExprList
+    2      | ExprList SEMI
+
+    3 ExprList: %empty
+    4         | Expr
+    5         | ExprList SEMI Expr
+
+    6 Expr: Expr3
+
+    7 Expr3: Expr2
+    8      | Expr2 MUL Expr2
+    9      | Expr2 DIV Expr1
+
+   10 Expr2: Expr1
+   11      | Expr1 ADD Expr1
+   12      | Expr1 SUB Expr1
+
+   13 Expr1: Expr0
+   14      | ADD Expr0
+   15      | SUB Expr0
+
+   16 Expr0: NUMBER
+   17      | L_PAREN Expr R_PAREN
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    NUMBER <Number> (258) 16
+    ADD (259) 11 14
+    SUB (260) 12 15
+    MUL (261) 8
+    DIV (262) 9
+    L_PAREN (263) 17
+    R_PAREN (264) 17
+    SEMI (265) 2 5
+
+
+Nonterminals, with rules where they appear
+
+    $accept (11)
+        on left: 0
+    start (12)
+        on left: 1 2
+        on right: 0
+    ExprList <ExprList> (13)
+        on left: 3 4 5
+        on right: 1 2 5
+    Expr <Expr> (14)
+        on left: 6
+        on right: 4 5 17
+    Expr3 <Expr> (15)
+        on left: 7 8 9
+        on right: 6
+    Expr2 <Expr> (16)
+        on left: 10 11 12
+        on right: 7 8 9
+    Expr1 <Expr> (17)
+        on left: 13 14 15
+        on right: 9 10 11 12
+    Expr0 <Expr> (18)
+        on left: 16 17
+        on right: 13 14 15
+
+
+State 0
+
+    0 $accept: . start $end
+
+    NUMBER   shift, and go to state 1
+    ADD      shift, and go to state 2
+    SUB      shift, and go to state 3
+    L_PAREN  shift, and go to state 4
+
+    $default  reduce using rule 3 (ExprList)
+
+    start     go to state 5
+    ExprList  go to state 6
+    Expr      go to state 7
+    Expr3     go to state 8
+    Expr2     go to state 9
+    Expr1     go to state 10
+    Expr0     go to state 11
+
+
+State 1
+
+   16 Expr0: NUMBER .
+
+    $default  reduce using rule 16 (Expr0)
+
+
+State 2
+
+   14 Expr1: ADD . Expr0
+
+    NUMBER   shift, and go to state 1
+    L_PAREN  shift, and go to state 4
+
+    Expr0  go to state 12
+
+
+State 3
+
+   15 Expr1: SUB . Expr0
+
+    NUMBER   shift, and go to state 1
+    L_PAREN  shift, and go to state 4
+
+    Expr0  go to state 13
+
+
+State 4
+
+   17 Expr0: L_PAREN . Expr R_PAREN
+
+    NUMBER   shift, and go to state 1
+    ADD      shift, and go to state 2
+    SUB      shift, and go to state 3
+    L_PAREN  shift, and go to state 4
+
+    Expr   go to state 14
+    Expr3  go to state 8
+    Expr2  go to state 9
+    Expr1  go to state 10
+    Expr0  go to state 11
+
+
+State 5
+
+    0 $accept: start . $end
+
+    $end  shift, and go to state 15
+
+
+State 6
+
+    1 start: ExprList .
+    2      | ExprList . SEMI
+    5 ExprList: ExprList . SEMI Expr
+
+    SEMI  shift, and go to state 16
+
+    $default  reduce using rule 1 (start)
+
+
+State 7
+
+    4 ExprList: Expr .
+
+    $default  reduce using rule 4 (ExprList)
+
+
+State 8
+
+    6 Expr: Expr3 .
+
+    $default  reduce using rule 6 (Expr)
+
+
+State 9
+
+    7 Expr3: Expr2 .
+    8      | Expr2 . MUL Expr2
+    9      | Expr2 . DIV Expr1
+
+    MUL  shift, and go to state 17
+    DIV  shift, and go to state 18
+
+    $default  reduce using rule 7 (Expr3)
+
+
+State 10
+
+   10 Expr2: Expr1 .
+   11      | Expr1 . ADD Expr1
+   12      | Expr1 . SUB Expr1
+
+    ADD  shift, and go to state 19
+    SUB  shift, and go to state 20
+
+    $default  reduce using rule 10 (Expr2)
+
+
+State 11
+
+   13 Expr1: Expr0 .
+
+    $default  reduce using rule 13 (Expr1)
+
+
+State 12
+
+   14 Expr1: ADD Expr0 .
+
+    $default  reduce using rule 14 (Expr1)
+
+
+State 13
+
+   15 Expr1: SUB Expr0 .
+
+    $default  reduce using rule 15 (Expr1)
+
+
+State 14
+
+   17 Expr0: L_PAREN Expr . R_PAREN
+
+    R_PAREN  shift, and go to state 21
+
+
+State 15
+
+    0 $accept: start $end .
+
+    $default  accept
+
+
+State 16
+
+    2 start: ExprList SEMI .
+    5 ExprList: ExprList SEMI . Expr
+
+    NUMBER   shift, and go to state 1
+    ADD      shift, and go to state 2
+    SUB      shift, and go to state 3
+    L_PAREN  shift, and go to state 4
+
+    $default  reduce using rule 2 (start)
+
+    Expr   go to state 22
+    Expr3  go to state 8
+    Expr2  go to state 9
+    Expr1  go to state 10
+    Expr0  go to state 11
+
+
+State 17
+
+    8 Expr3: Expr2 MUL . Expr2
+
+    NUMBER   shift, and go to state 1
+    ADD      shift, and go to state 2
+    SUB      shift, and go to state 3
+    L_PAREN  shift, and go to state 4
+
+    Expr2  go to state 23
+    Expr1  go to state 10
+    Expr0  go to state 11
+
+
+State 18
+
+    9 Expr3: Expr2 DIV . Expr1
+
+    NUMBER   shift, and go to state 1
+    ADD      shift, and go to state 2
+    SUB      shift, and go to state 3
+    L_PAREN  shift, and go to state 4
+
+    Expr1  go to state 24
+    Expr0  go to state 11
+
+
+State 19
+
+   11 Expr2: Expr1 ADD . Expr1
+
+    NUMBER   shift, and go to state 1
+    ADD      shift, and go to state 2
+    SUB      shift, and go to state 3
+    L_PAREN  shift, and go to state 4
+
+    Expr1  go to state 25
+    Expr0  go to state 11
+
+
+State 20
+
+   12 Expr2: Expr1 SUB . Expr1
+
+    NUMBER   shift, and go to state 1
+    ADD      shift, and go to state 2
+    SUB      shift, and go to state 3
+    L_PAREN  shift, and go to state 4
+
+    Expr1  go to state 26
+    Expr0  go to state 11
+
+
+State 21
+
+   17 Expr0: L_PAREN Expr R_PAREN .
+
+    $default  reduce using rule 17 (Expr0)
+
+
+State 22
+
+    5 ExprList: ExprList SEMI Expr .
+
+    $default  reduce using rule 5 (ExprList)
+
+
+State 23
+
+    8 Expr3: Expr2 MUL Expr2 .
+
+    $default  reduce using rule 8 (Expr3)
+
+
+State 24
+
+    9 Expr3: Expr2 DIV Expr1 .
+
+    $default  reduce using rule 9 (Expr3)
+
+
+State 25
+
+   11 Expr2: Expr1 ADD Expr1 .
+
+    $default  reduce using rule 11 (Expr2)
+
+
+State 26
+
+   12 Expr2: Expr1 SUB Expr1 .
+
+    $default  reduce using rule 12 (Expr2)
